@@ -37,6 +37,13 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Remove password when converting to JSON
+UserSchema.methods.toJSON = function () {
+  const obj = this.toObject();
+  delete obj.password;
+  return obj;
+};
+
 const User = mongoose.model("User", UserSchema);
 
 export default User;
