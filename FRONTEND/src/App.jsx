@@ -1,12 +1,10 @@
-import { FaChild } from "react-icons/fa";
+import { createBrowserRouter } from "react-router";
+import { RouterProvider } from "react-router/dom";
+import router from "./routes/router";
 
 function App() {
 
-  return (
-    <>
-      <h1 className="flex items-center text-red-500">Hello Fleet Track <FaChild /></h1>
-    </>
-  )
+  return <RouterProvider router={createBrowserRouter(router)}/>
 }
 
 export default App

@@ -24,7 +24,7 @@ class AuthService {
     async register(data) {
         const { email } = data;
         const exists = await this.userRepository.findByEmail(email);
-        if (exists) throw CustomThrowError('Email already registered', 409);
+        if (exists) throw CustomThrowError('emailExist' ,'Email already registered', 409);
 
         const salt = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(data.password, salt);
@@ -34,10 +34,16 @@ class AuthService {
 
     async login({ email, password }) {
         const user = await this.userRepository.findByEmail(email);
-        if (!user) throw CustomThrowError('Invalid credentials', 400);
-        
+        if (!user) throw CustomThrowError('invalidCredentials' ,'Invalid credentials', 400);
+
         const match = await bcrypt.compare(password, user.password);
-        if (!match) throw CustomThrowError('Invalid credentials', 400) 
+        if (!match) throw CustomThrowError('invalidCredentials' ,'Invalid credentials', 400);
+
+        // Set status to Active on login
+        if (user.status !== 'Active') {
+            user.status = 'Active';
+            await user.save();
+        }
 
         const token = this.signToken(user);
         return { user: user.toJSON(), token };

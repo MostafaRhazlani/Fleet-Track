@@ -9,7 +9,12 @@ class AuthController {
             return res.status(201).json({ status: "success", data: { user: result.user } });
         } catch (error) {
             const statucCode = error.statucCode || 500;
-            return res.status(statucCode).json({ status: "error", message: error.message });
+            return res.status(statucCode).json({ 
+                status: "error", 
+                errors: {
+                    [error.field] : error.message
+                } 
+            });
         }
     }
 
@@ -19,7 +24,12 @@ class AuthController {
             return res.status(200).json({ status: "success", user: result.user, token: result.token });
         } catch (error) {
             const statucCode = error.statucCode || 500;
-            return res.status(statucCode).json({ status: "error", message: error.message });
+            return res.status(statucCode).json({ 
+                status: "error", 
+                errors: {
+                    [error.field] : error.message
+                } 
+            });
         }
     }
 }

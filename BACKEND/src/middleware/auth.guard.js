@@ -16,6 +16,12 @@ class AuthGuard {
     try {
       const decoded = jwt.verify(token, this.jwtSecret);
       req.user = decoded;
+
+      res.cookie('token', token, {
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge: 24 * 60 * 60 * 1000
+      })
       next();
     } catch (error) {
       return res.status(401).json({ status: "error", message: "Invalid or expired token" });
