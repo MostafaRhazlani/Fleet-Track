@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import "dotenv/config";
 import Database from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
+import vehicleRoutes from "./routes/vehicle.routes.js";
 
 const app = express();
 // const upload = multer();
@@ -24,6 +25,7 @@ app.use(cookieParser())
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/vehicle", vehicleRoutes);
 
 app.listen(PORT, () => {
     console.log('Server is runing at: ', PORT);
