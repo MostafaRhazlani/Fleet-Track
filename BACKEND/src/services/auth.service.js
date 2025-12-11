@@ -48,6 +48,11 @@ class AuthService {
         const token = this.signToken(user);
         return { user: user.toJSON(), token };
     }
+
+    async logout(userId) {
+        if (!userId) return;
+        await this.userRepository.updateStatus(userId, 'Inactive');
+    }
 }
 
 export default AuthService;

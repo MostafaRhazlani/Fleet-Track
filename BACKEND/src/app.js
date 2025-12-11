@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 // import multer from "multer";
 import "dotenv/config";
 import Database from "./config/db.js";
@@ -18,6 +19,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(cookieParser())
 // app.use(upload.none());
 
 // Routes

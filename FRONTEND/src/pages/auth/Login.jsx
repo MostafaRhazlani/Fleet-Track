@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../store/authSlice';
 import { Eye, EyeOff, Mail } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 import api from '../../tools/axios';
@@ -14,6 +16,7 @@ const Login = () => {
         password: ''
     });
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     // Validation logic
     const validateField = (name, value) => {
@@ -70,10 +73,15 @@ const Login = () => {
                 password: formData.password
             });
             const user = res.data?.user;
-            if (user?.role === 'Admin') {
-                navigate('/admin/dashboard');
-            } else if (user?.role === 'Driver') {
-                navigate('/driver/dashboard');
+            if (user) {
+                dispatch(setUser(user));
+                if (user.role === 'Admin') {
+                    navigate('/admin/dashboard');
+                } else if (user.role === 'Driver') {
+                    navigate('/driver/dashboard');
+                } else {
+                    navigate('/login');
+                }
             }
         } catch (err) {
             const serverError = err.response?.data?.errors || 'Login failed';
