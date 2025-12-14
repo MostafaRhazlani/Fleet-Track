@@ -50,6 +50,24 @@ export const deleteTrip = createAsyncThunk('trip/delete', async (id, { rejectWit
   }
 });
 
+export const downloadTripPdf = createAsyncThunk('trip/downloadPdf', async (id, { rejectWithValue }) => {
+  try {
+    const response = await api.get(`/trip/${id}/pdf`, { responseType: 'blob' });
+    const blob = response.data;
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `trip-${id}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+    return { id };
+  } catch (error) {
+    return rejectWithValue(error.response?.data || 'Failed to download PDF');
+  }
+});
+
 const tripSlice = createSlice({
   name: 'trip',
   initialState,

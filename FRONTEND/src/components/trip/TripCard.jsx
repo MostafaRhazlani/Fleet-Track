@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useRef, useEffect } from 'react';
 import { formatDateTime } from '../../tools/date';
-import { updateTripStatus } from '../../store/trip/tripSlice';
+import { updateTripStatus, downloadTripPdf } from '../../store/trip/tripSlice';
 
 const statusOptions = [
   { value: 'planned', label: 'Planned' },
@@ -122,12 +122,24 @@ const TripCard = ({ trip, onEdit, onDelete }) => {
         <div className="flex justify-between"><span>End</span><span>{end}</span></div>
       </div>
 
-      {showActions && (
-        <div className="mt-auto flex gap-2">
-          <button onClick={() => onEdit?.(trip)} className="flex-1 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50">Edit</button>
-          <button onClick={() => onDelete?.(trip)} className="flex-1 py-2 rounded-lg border border-red-200 text-sm font-medium text-red-600 hover:bg-red-50">Delete</button>
-        </div>
-      )}
+      <div className="mt-auto flex gap-2">
+        <button onClick={async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          try {
+            await dispatch(downloadTripPdf(trip._id)).unwrap();
+          } catch (err) {
+            console.error('Download failed', err);
+          }
+        }} className="py-2 px-3 rounded-lg cursor-pointer border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50">Download</button>
+        {showActions && (
+          <>
+            <button onClick={() => onEdit?.(trip)} className="flex-1 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50">Edit</button>
+            <button onClick={() => onDelete?.(trip)} className="flex-1 py-2 rounded-lg border border-red-200 text-sm font-medium text-red-600 hover:bg-red-50">Delete</button>
+          </>
+        )}
+      </div>
     </div>
   );
 };
