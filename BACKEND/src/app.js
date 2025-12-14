@@ -6,6 +6,7 @@ import "dotenv/config";
 import Database from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
 import vehicleRoutes from "./routes/vehicle.routes.js";
+import tireRoutes from "./routes/tire.routes.js";
 import path from 'path';
 
 const app = express();
@@ -30,6 +31,7 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'public', 'uploads')
 // Routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/vehicle", vehicleRoutes);
+app.use("/api/v1/tire", tireRoutes);
 
 app.listen(PORT, () => {
     console.log('Server is runing at: ', PORT);
