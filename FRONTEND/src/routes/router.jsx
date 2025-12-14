@@ -6,6 +6,7 @@ import PrivateRoute from "../components/layouts/PrivateLayout";
 import Authorization from "../pages/auth/Authorization";
 import Vehicles from "../pages/admin/Vehicles";
 import Tires from "../pages/admin/Tires";
+import Trips from "../pages/admin/Trips";
 
 const router = [
     { path: 'login', element: <Login /> },
@@ -17,7 +18,8 @@ const router = [
         children: [
             { path: 'dashboard', element: <Dashboard /> },
             { path: 'vehicles', element: <Vehicles /> },
-            { path: 'tires', element: <Tires /> }
+            { path: 'tires', element: <Tires /> },
+            { path: 'trips', element: <Trips /> }
         ]
     },
     {

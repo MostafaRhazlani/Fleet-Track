@@ -1,0 +1,60 @@
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import api from '../../tools/axios';
+
+const initialState = {
+  trips: [],
+};
+
+export const fetchTrips = createAsyncThunk('trips', async () => {
+  return (await api.get('/trip/trips')).data.trips;
+});
+
+export const createTrip = createAsyncThunk('trip/create', async (formData, { rejectWithValue }) => {
+  try {
+    const response = await api.post('/trip/create', formData);
+    return response.data.trip;
+  } catch (error) {
+    return rejectWithValue(error.response?.data || 'Failed to create');
+  }
+});
+
+export const updateTrip = createAsyncThunk('trip/update', async ({ id, formData }, { rejectWithValue }) => {
+  try {
+    const response = await api.put(`/trip/${id}/update`, formData);
+    return response.data.trip;
+  } catch (error) {
+    return rejectWithValue(error.response?.data || 'Failed to update');
+  }
+});
+
+export const deleteTrip = createAsyncThunk('trip/delete', async (id, { rejectWithValue }) => {
+  try {
+    await api.delete(`/trip/${id}/delete`);
+    return id;
+  } catch (error) {
+    return rejectWithValue(error.response?.data || 'Failed to delete');
+  }
+});
+
+const tripSlice = createSlice({
+  name: 'trip',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTrips.fulfilled, (state, action) => {
+        state.trips = action.payload;
+      })
+      .addCase(createTrip.fulfilled, (state, action) => {
+        state.trips.push(action.payload);
+      })
+      .addCase(updateTrip.fulfilled, (state, action) => {
+        state.trips = state.trips.map(t => t._id === action.payload._id ? action.payload : t);
+      })
+      .addCase(deleteTrip.fulfilled, (state, action) => {
+        state.trips = state.trips.filter(t => t._id !== action.payload);
+      });
+  },
+});
+
+export default tripSlice.reducer;

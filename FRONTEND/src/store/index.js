@@ -4,6 +4,7 @@ import vehicleReducer from './vehicle/vehicleSlice';
 import userReducer from './user/userSlice';
 import modalReducer from './ui/modalSlice';
 import tireReducer from './tire/tireSlice';
+import tripReducer from './trip/tripSlice';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     users: userReducer,
     modal: modalReducer,
     tires: tireReducer,
+    trips: tripReducer,
   },
 });
 

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setModalMode, setModalOpen } from '../../store/ui/modalSlice'
 import VehicleModal from '../vehicle/VehicleModal'
 import TireModal from '../tire/TireModal'
+import TripModal from '../trip/TripModal'
 import { useLocation } from 'react-router'
 
 const Navbar = () => {
@@ -36,6 +37,7 @@ const Navbar = () => {
     const p = location.pathname || '';
     if (p.includes('/vehicles')) return 'vehicle';
     if (p.includes('/tires')) return 'tire';
+    if (p.includes('/trips')) return 'trip';
     return 'vehicle';
   })();
 
@@ -56,10 +58,12 @@ const Navbar = () => {
             icon={Search}/>
           <CustomSelect className="w-full md:min-w-52" options={vehicleStatus}/>
         </div>
-        <PrimaryButton onClick={handleShowModal} className="" title={modalTarget === 'tire' ? 'Create tire' : 'Create vehicle'} />
+        <PrimaryButton onClick={handleShowModal} className="" title={modalTarget === 'tire' ? 'Create tire' : modalTarget === 'trip' ? 'Create trip' : 'Create vehicle'} />
       </nav>
       {modalTarget === 'tire' ? (
         <TireModal open={modalOpen} onClose={handleCloseModal} />
+      ) : modalTarget === 'trip' ? (
+        <TripModal open={modalOpen} onClose={handleCloseModal} />
       ) : (
         <VehicleModal open={modalOpen} onClose={handleCloseModal} />
       )}
