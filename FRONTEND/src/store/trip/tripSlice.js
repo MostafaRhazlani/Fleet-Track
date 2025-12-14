@@ -3,10 +3,15 @@ import api from '../../tools/axios';
 
 const initialState = {
   trips: [],
+  mytrips: [],
 };
 
 export const fetchTrips = createAsyncThunk('trips', async () => {
   return (await api.get('/trip/trips')).data.trips;
+});
+
+export const fetchMyTrips = createAsyncThunk('trips/my', async () => {
+  return (await api.get('/trip/my-trips')).data.trips;
 });
 
 export const createTrip = createAsyncThunk('trip/create', async (formData, { rejectWithValue }) => {
@@ -24,6 +29,15 @@ export const updateTrip = createAsyncThunk('trip/update', async ({ id, formData 
     return response.data.trip;
   } catch (error) {
     return rejectWithValue(error.response?.data || 'Failed to update');
+  }
+});
+
+export const updateTripStatus = createAsyncThunk('trip/updateStatus', async ({ id, status }, { rejectWithValue }) => {
+  try {
+    const response = await api.patch(`/trip/${id}/status`, { status });
+    return response.data.trip;
+  } catch (error) {
+    return rejectWithValue(error.response?.data || 'Failed to update status');
   }
 });
 
@@ -45,10 +59,16 @@ const tripSlice = createSlice({
       .addCase(fetchTrips.fulfilled, (state, action) => {
         state.trips = action.payload;
       })
+      .addCase(fetchMyTrips.fulfilled, (state, action) => {
+        state.mytrips = action.payload;
+      })
       .addCase(createTrip.fulfilled, (state, action) => {
         state.trips.push(action.payload);
       })
       .addCase(updateTrip.fulfilled, (state, action) => {
+        state.trips = state.trips.map(t => t._id === action.payload._id ? action.payload : t);
+      })
+      .addCase(updateTripStatus.fulfilled, (state, action) => {
         state.trips = state.trips.map(t => t._id === action.payload._id ? action.payload : t);
       })
       .addCase(deleteTrip.fulfilled, (state, action) => {

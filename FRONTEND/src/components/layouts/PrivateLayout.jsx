@@ -12,10 +12,10 @@ const PrivateRoute = ({ allowedRoles }) => {
   const { user: fetchedUser, loading } = useAuthenticatedUser();
 
   useEffect(() => {
-    if (!fetchedUser) {
+    if (fetchedUser && !userState) {
       dispatch(setUser(fetchedUser));
     }
-  }, [fetchedUser, dispatch]);
+  }, [fetchedUser, userState, dispatch]);
 
   if (loading && !userState) {
     return <div className="text-center p-10">Loading authentication...</div>;

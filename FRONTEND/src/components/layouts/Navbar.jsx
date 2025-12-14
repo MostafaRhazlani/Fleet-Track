@@ -31,6 +31,7 @@ const Navbar = () => {
 
   const dispatch = useDispatch();
   const modalOpen = useSelector((state) => state.modal?.modalOpen);
+  const currentUser = useSelector((state) => state.auth?.user);
   const location = useLocation();
 
   const modalTarget = (() => {
@@ -58,7 +59,9 @@ const Navbar = () => {
             icon={Search}/>
           <CustomSelect className="w-full md:min-w-52" options={vehicleStatus}/>
         </div>
-        <PrimaryButton onClick={handleShowModal} className="" title={modalTarget === 'tire' ? 'Create tire' : modalTarget === 'trip' ? 'Create trip' : 'Create vehicle'} />
+        {currentUser?.role === 'Admin' && (
+          <PrimaryButton onClick={handleShowModal} className="" title={modalTarget === 'tire' ? 'Create tire' : modalTarget === 'trip' ? 'Create trip' : 'Create vehicle'} />
+        )}
       </nav>
       {modalTarget === 'tire' ? (
         <TireModal open={modalOpen} onClose={handleCloseModal} />

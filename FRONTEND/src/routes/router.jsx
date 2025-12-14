@@ -7,6 +7,7 @@ import Authorization from "../pages/auth/Authorization";
 import Vehicles from "../pages/admin/Vehicles";
 import Tires from "../pages/admin/Tires";
 import Trips from "../pages/admin/Trips";
+import MyTrips from "../pages/driver/MyTrips";
 
 const router = [
     { path: 'login', element: <Login /> },
@@ -26,7 +27,8 @@ const router = [
         path: 'driver',
         element: <PrivateRoute allowedRoles={['Driver']}/>,
         children: [
-            { path: 'dashboard', element: <DriverDashboard /> }
+            { path: 'dashboard', element: <DriverDashboard /> },
+            { path: 'my-trips', element: <MyTrips /> }
         ]
     }
 ];

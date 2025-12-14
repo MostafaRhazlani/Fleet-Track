@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import api from '../../tools/axios';
 import { useNavigate, useLocation, Link } from 'react-router';
 import { clearUser } from '../../store/authSlice';
@@ -11,24 +11,21 @@ const Header = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  const headerMenu = [
-    {
-      path: '/admin/dashboard',
-      title: 'Dashboard'
-    },
-    {
-      path: '/admin/vehicles',
-      title: 'Vehicles'
-    },
-    {
-      path: '/admin/tires',
-      title: 'Tires'
-    },
-    {
-      path: '/admin/trips',
-      title: 'Trips'
-    }
-  ]
+  const user = useSelector((state) => state.auth.user);
+
+  const adminMenu = [
+    { path: '/admin/dashboard', title: 'Dashboard' },
+    { path: '/admin/vehicles', title: 'Vehicles' },
+    { path: '/admin/tires', title: 'Tires' },
+    { path: '/admin/trips', title: 'Trips' },
+  ];
+
+  const driverMenu = [
+    { path: '/driver/dashboard', title: 'Dashboard' },
+    { path: '/driver/my-trips', title: 'My Trips' },
+  ];
+
+  const headerMenu = user?.role === 'Driver' ? driverMenu : adminMenu;
 
   const handleLogout = async () => {
     try {
