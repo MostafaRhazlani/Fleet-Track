@@ -82,6 +82,22 @@ class TripController {
       res.status(400).json({ status: 'error', message: error.message });
     }
   }
+
+  async generatePdf(req, res) {
+    try {
+      const tripId = req.params.id;
+      const trip = await this.tripService.getTripById(tripId);
+      if (!trip) return res.status(404).json({ status: 'error', message: 'Trip not found' });
+
+      const buffer = await this.tripService.generateTripPdf(trip);
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="trip-${tripId}.pdf"`);
+      res.setHeader('Content-Length', buffer.length);
+      return res.end(buffer);
+    } catch (error) {
+      res.status(500).json({ status: 'error', message: error.message });
+    }
+  }
 }
 
 export default TripController;

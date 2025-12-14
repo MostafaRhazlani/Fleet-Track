@@ -17,6 +17,7 @@ router.post('/create', tripMiddleware.validateTrip(), tripController.create.bind
 router.get('/trips', tripController.getAll.bind(tripController));
 router.get('/my-trips', authGuard.requireAuth, authGuard.requireRole('Driver'), tripController.getByDriver.bind(tripController));
 router.patch('/:id/status', authGuard.requireAuth, tripController.updateStatus.bind(tripController));
+router.get('/:id/pdf', authGuard.requireAuth, tripController.generatePdf.bind(tripController));
 router.get('/:id', tripController.getById.bind(tripController));
 router.put('/:id/update', tripMiddleware.validateTrip(), tripController.update.bind(tripController));
 router.delete('/:id/delete', tripController.delete.bind(tripController));
