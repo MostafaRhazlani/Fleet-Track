@@ -5,6 +5,7 @@ import DriverDashboard from "../pages/driver/DriverDashboard";
 import PrivateRoute from "../components/layouts/PrivateLayout";
 import Authorization from "../pages/auth/Authorization";
 import Vehicles from "../pages/admin/Vehicles";
+import Tires from "../pages/admin/Tires";
 
 const router = [
     { path: 'login', element: <Login /> },
@@ -15,7 +16,8 @@ const router = [
         element: <PrivateRoute allowedRoles={['Admin']}/>,
         children: [
             { path: 'dashboard', element: <Dashboard /> },
-            { path: 'vehicles', element: <Vehicles /> }
+            { path: 'vehicles', element: <Vehicles /> },
+            { path: 'tires', element: <Tires /> }
         ]
     },
     {

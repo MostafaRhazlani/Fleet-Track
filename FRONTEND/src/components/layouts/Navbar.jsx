@@ -5,6 +5,8 @@ import { Search } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setModalMode, setModalOpen } from '../../store/ui/modalSlice'
 import VehicleModal from '../vehicle/VehicleModal'
+import TireModal from '../tire/TireModal'
+import { useLocation } from 'react-router'
 
 const Navbar = () => {
   const vehicleStatus = [
@@ -28,6 +30,14 @@ const Navbar = () => {
 
   const dispatch = useDispatch();
   const modalOpen = useSelector((state) => state.modal?.modalOpen);
+  const location = useLocation();
+
+  const modalTarget = (() => {
+    const p = location.pathname || '';
+    if (p.includes('/vehicles')) return 'vehicle';
+    if (p.includes('/tires')) return 'tire';
+    return 'vehicle';
+  })();
 
   const handleShowModal = () => {
     dispatch(setModalMode('add'));
@@ -46,9 +56,13 @@ const Navbar = () => {
             icon={Search}/>
           <CustomSelect className="w-full md:min-w-52" options={vehicleStatus}/>
         </div>
-        <PrimaryButton onClick={handleShowModal} className="" title="Create vehicle" />
+        <PrimaryButton onClick={handleShowModal} className="" title={modalTarget === 'tire' ? 'Create tire' : 'Create vehicle'} />
       </nav>
-      <VehicleModal open={modalOpen} onClose={handleCloseModal} />
+      {modalTarget === 'tire' ? (
+        <TireModal open={modalOpen} onClose={handleCloseModal} />
+      ) : (
+        <VehicleModal open={modalOpen} onClose={handleCloseModal} />
+      )}
     </>
   )
 }

@@ -3,6 +3,7 @@ import authReducer from './authSlice';
 import vehicleReducer from './vehicle/vehicleSlice';
 import userReducer from './user/userSlice';
 import modalReducer from './ui/modalSlice';
+import tireReducer from './tire/tireSlice';
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     vehicles: vehicleReducer,
     users: userReducer,
     modal: modalReducer,
+    tires: tireReducer,
   },
 });
 
