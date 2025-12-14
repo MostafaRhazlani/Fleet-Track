@@ -5,7 +5,12 @@ class VehicleController {
 
   async create(req, res) {
     try {
-      const vehicle = await this.vehicleService.createVehicle(req.body);
+      const data = { ...req.body };
+      if (req.file) {
+        // store relative path that frontend can use (served at /uploads)
+        data.image = `/uploads/${req.file.filename}`;
+      }
+      const vehicle = await this.vehicleService.createVehicle(data);
       res.status(201).json({ status: 'success', vehicle });
     } catch (error) {
         const statucCode = error.statucCode || 500;
@@ -39,7 +44,11 @@ class VehicleController {
 
   async update(req, res) {
     try {
-      const vehicle = await this.vehicleService.updateVehicle(req.params.id, req.body);
+      const data = { ...req.body };
+      if (req.file) {
+        data.image = `/uploads/${req.file.filename}`;
+      }
+      const vehicle = await this.vehicleService.updateVehicle(req.params.id, data);
       if (!vehicle) return res.status(404).json({ status: 'error', message: 'Vehicle not found' });
       res.status(200).json({ status: 'success', vehicle });
     } catch (error) {

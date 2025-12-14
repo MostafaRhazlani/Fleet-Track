@@ -1,6 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 @import "tailwindcss";
 
+@theme {
+  --color-primary: #EC6822;
+  --color-primary_hover: #C34F10;
+  /* ... add more colors as needed */
+}
+
 body {
     font-family: 'Rubik';
+    position: relative;
 }

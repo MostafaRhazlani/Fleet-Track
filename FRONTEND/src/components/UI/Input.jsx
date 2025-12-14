@@ -8,19 +8,25 @@ const Input = ({
     placeholder, 
     error, 
     icon: Icon,
-    onIconClick
+    className,
+    onIconClick,
+    disabled = false
 }) => {
 
     // Dynamic classes based on error state
-    const baseBorderClass = "w-full px-4 py-2 rounded-xl border focus:outline-none focus:ring-2 transition-all";
-    const normalClass = "border-indigo-500/20 text-gray-900 focus:ring-indigo-500 focus:border-transparent";
+    const baseBorderClass = "px-4 py-2 rounded-xl border focus:outline-none focus:ring-2 transition-all";
+    const normalClass = "border-primary/20 text-gray-900 focus:ring-primary focus:border-transparent";
     const errorClass = "border-red-500 text-red-900 focus:ring-red-500 bg-red-50";
 
     return (
         <div className="group">
-            <label className="block text-xs font-medium text-gray-500 mb-1 ml-1">
-                {label}
-            </label>
+            {
+                label && (
+                    <label className="block text-xs font-medium text-gray-500 mb-1 ml-1">
+                        {label}
+                    </label>
+                )
+            }
             <div className="relative">
                 <input
                     type={type}
@@ -28,8 +34,9 @@ const Input = ({
                     value={value}
                     onChange={onChange}
                     onBlur={onBlur}
+                    disabled={disabled}
                     placeholder={placeholder}
-                    className={`${baseBorderClass} ${error ? errorClass : normalClass}`}
+                    className={`${baseBorderClass} ${className} ${error ? errorClass : normalClass}`}
                     autoComplete="true"
                 />
                 
@@ -44,7 +51,7 @@ const Input = ({
                             <Icon className="w-5 h-5" />
                         </button>
                     ) : (
-                        <Icon className={`w-5 h-5 absolute right-4 top-3.5 transition-opacity ${error ? 'text-red-400' : 'text-gray-400 opacity-0 group-hover:opacity-50'}`} />
+                        <Icon className={`w-5 h-5 absolute right-4 top-3 transition-opacity ${error ? 'text-red-400' : 'text-gray-400 opacity-0 group-hover:opacity-50'}`} />
                     )
                 )}
             </div>

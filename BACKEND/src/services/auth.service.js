@@ -53,6 +53,12 @@ class AuthService {
         if (!userId) return;
         await this.userRepository.updateStatus(userId, 'Inactive');
     }
+
+    // Added: return all users with role "Driver"
+    async getDrivers() {
+        const drivers = await this.userRepository.findDrivers();
+        return drivers;
+    }
 }
 
 export default AuthService;

@@ -16,6 +16,10 @@ class UserRepository {
   async findById(id) {
     return User.findById(id);
   }
+
+  async findDrivers() {
+    return User.find({ role: 'Driver'});
+  }
 }
 
 export default UserRepository

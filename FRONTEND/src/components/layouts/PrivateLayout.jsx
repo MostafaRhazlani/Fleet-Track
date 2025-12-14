@@ -4,6 +4,7 @@ import { Navigate, Outlet } from 'react-router';
 import { setUser } from '../../store/authSlice';
 import { useAuthenticatedUser } from '../../hooks/auth';
 import Header from './Header';
+import Navbar from './Navbar';
 
 const PrivateRoute = ({ allowedRoles }) => {
   const dispatch = useDispatch();
@@ -33,7 +34,12 @@ const PrivateRoute = ({ allowedRoles }) => {
   return (
     <>
       <Header />
-      <Outlet />;
+      <Navbar />
+      <main className='bg-indigo-200/20 w-full h-screen pt-10'>
+        <div className='w-11/12 lg:w-4/5 mx-auto'>
+          <Outlet />
+        </div>
+      </main>
     </>
   )
 };

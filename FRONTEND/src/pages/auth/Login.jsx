@@ -141,6 +141,7 @@ const Login = () => {
                             <div className="text-red-500 text-sm mb-2">{errors.general}</div>
                         )}
                         <Input
+                            className="w-full"
                             label="Email"
                             name="email"
                             placeholder="name@company.com"
@@ -151,6 +152,7 @@ const Login = () => {
                             icon={Mail}
                         />
                         <Input
+                            className="w-full"
                             label="Password"
                             name="password"
                             type={showPassword ? "text" : "password"}
@@ -162,17 +164,17 @@ const Login = () => {
                             icon={showPassword ? EyeOff : Eye}
                             onIconClick={() => setShowPassword(!showPassword)}
                         />
-                        <div className="flex justify-end mb-0">
-                            <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                        <div className="flex justify-end mb-4">
+                            <a href="#" className="text-sm font-medium text-primary hover:text-primary_hover">
                                 Forgot password?
                             </a>
                         </div>
-                        <PrimaryButton title="Log in" type="submit" />
+                        <PrimaryButton className="w-full" title="Log in" type="submit" />
                     </form>
 
                     <div className="mt-8 text-center text-sm">
                         <span className="text-gray-500">Don't have an account? </span>
-                        <Link to="/register" className="font-semibold text-indigo-600 hover:text-indigo-500 hover:underline">Sign up</Link>
+                        <Link to="/register" className="font-semibold text-primary hover:text-primary_hover hover:underline">Sign up</Link>
                     </div>
                 </div>
             </div>

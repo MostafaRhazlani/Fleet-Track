@@ -6,6 +6,7 @@ import "dotenv/config";
 import Database from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
 import vehicleRoutes from "./routes/vehicle.routes.js";
+import path from 'path';
 
 const app = express();
 // const upload = multer();
@@ -22,6 +23,9 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser())
 // app.use(upload.none());
+
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(process.cwd(), 'public', 'uploads')));
 
 // Routes
 app.use("/api/v1/auth", authRoutes);

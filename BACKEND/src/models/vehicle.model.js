@@ -4,6 +4,7 @@ const vehicleSchema = new mongoose.Schema({
   plateNumber: { type: String, required: true, unique: true },
   brand: { type: String,  required: true },
   model: { type: String,  required: true },
+  image: { type: String },
   maxLoad: { type: String,  required: true },
   
   vehicleType: { type: String, enum: ['Truck', 'Trailer'], required: true },
@@ -12,8 +13,8 @@ const vehicleSchema = new mongoose.Schema({
   status: {  type: String,  enum: ['Available', 'In-transit', 'Maintenance', 'Out-service'],  default: 'Available' },
   
   // Maintenance Tracking
-  lastOilChangeMileage: { type: Number },
-  nextServiceDate: { type: Date },
+  lastOilChangeMileage: { type: Number, default: 0 },
+  nextServiceDate: { type: Date, default: null },
   
   // Relational Driver
   currentDriver: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }

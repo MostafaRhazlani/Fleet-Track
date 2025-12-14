@@ -61,6 +61,16 @@ class AuthController {
             return res.status(401).json({ status: "error", message: "You are not logged in yet" });
         }
     }
+
+    async getDrivers(req, res) {
+        try {
+            const drivers = await this.authService.getDrivers();
+            return res.status(200).json({ status: "success", drivers });
+        } catch (error) {
+            return res.status(401).json({ status: "error", message: "Failed to get drivers" });
+
+        }
+    }
 }
 
 export default AuthController

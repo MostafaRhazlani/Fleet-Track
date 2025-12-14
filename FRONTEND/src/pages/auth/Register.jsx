@@ -159,8 +159,9 @@ const Register = () => {
                     <p className="text-gray-500 mb-8">Join the platform to gain real-time visibility over your fleet.</p>
 
                     <form onSubmit={handleSubmit} encType='multipart/form-data' className="space-y-4">
-                        <div className='grid grid-cols-2 gap-4'>
+                        <div className='grid md:grid-cols-2 gap-4'>
                             <Input
+                                className="w-full"
                                 label="First Name"
                                 name="firstName"
                                 placeholder="e.g. Alex"
@@ -171,6 +172,7 @@ const Register = () => {
                                 icon={User}
                             />
                             <Input
+                                className="w-full"
                                 label="Last Name"
                                 name="lastName"
                                 placeholder="e.g. Jordan"
@@ -181,8 +183,9 @@ const Register = () => {
                                 icon={User}
                             />
                         </div>
-                        <div className='grid grid-cols-2 gap-4'>
+                        <div className='grid md:grid-cols-2 gap-4'>
                             <Input
+                                className="w-full"
                                 label="Phone Number"
                                 name="phone"
                                 placeholder="e.g. +212612345678"
@@ -195,6 +198,7 @@ const Register = () => {
 
                             {/* Email Input */}
                             <Input
+                                className="w-full"
                                 label="Email"
                                 name="email"
                                 type="email"
@@ -209,6 +213,7 @@ const Register = () => {
 
                         {/* Password Input */}
                         <Input
+                            className="w-full"
                             label="Password"
                             name="password"
                             type={showPassword ? "text" : "password"}
@@ -223,6 +228,7 @@ const Register = () => {
 
                         {/* Confirm Password Input */}
                         <Input
+                            className="w-full"
                             label="Confirm password"
                             name="confirmPassword"
                             type={showConfirmPassword ? "text" : "password"}
@@ -234,12 +240,12 @@ const Register = () => {
                             icon={showConfirmPassword ? EyeOff : Eye}
                             onIconClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         />
-                        <PrimaryButton title="Create account" type="submit" />
+                        <PrimaryButton className="mt-4 w-full" title="Create account" type="submit" />
                     </form>
 
                     <div className="mt-8 text-center text-sm">
                         <span className="text-gray-500">Already have an account? </span>
-                        <Link to="/login" className="font-semibold text-indigo-600 hover:text-indigo-500 hover:underline">Log in</Link>
+                        <Link to="/login" className="font-semibold text-primary hover:text-primary_hover hover:underline">Log in</Link>
                     </div>
                 </div>
             </div>

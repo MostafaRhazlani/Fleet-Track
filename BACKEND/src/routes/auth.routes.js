@@ -17,5 +17,6 @@ router.post("/register", authMiddleware.validateRegister(), authController.regis
 router.post("/login", authMiddleware.validateLogin(), authController.login.bind(authController));
 router.post('/logout', authGuard.requireAuth, authController.logout.bind(authController));
 router.get("/me", authGuard.requireAuth, authController.getAutenticatedUser.bind(authController));
+router.get("/drivers", authGuard.requireAuth, authGuard.requireRole('Admin'), authController.getDrivers.bind(authController));
 
 export default router;
