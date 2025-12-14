@@ -11,6 +11,10 @@ class TripService {
     return this.tripRepository.findAll();
   }
 
+  async getTripsByDriver(driverId) {
+    return this.tripRepository.findByDriver(driverId);
+  }
+
   async getTripById(id) {
     return this.tripRepository.findById(id);
   }

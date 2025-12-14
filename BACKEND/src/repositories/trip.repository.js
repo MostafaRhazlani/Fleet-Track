@@ -10,6 +10,10 @@ class TripRepository {
     return Trip.find().populate('driver');
   }
 
+  async findByDriver(driverId) {
+    return Trip.find({ driver: driverId }).populate('driver');
+  }
+
   async findById(id) {
     return Trip.findById(id).populate('driver');
   }
