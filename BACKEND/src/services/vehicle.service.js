@@ -19,6 +19,10 @@ class VehicleService {
     return this.vehicleRepository.findById(id);
   }
 
+  async getVehicleByDriver(driverId) {
+    return this.vehicleRepository.findByDriver(driverId);
+  }
+
   async updateVehicle(id, data) {
     return this.vehicleRepository.update(id, data);
   }

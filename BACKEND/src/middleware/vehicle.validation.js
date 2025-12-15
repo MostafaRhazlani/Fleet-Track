@@ -11,10 +11,22 @@ class VehicleMiddleware {
             body("vehicleType")
                 .isIn(["Truck", "Trailer"])
                 .withMessage("Vehicle type must be Truck or Trailer"),
-            body("currentMileage")
+            body("totalMileage")
                 .optional()
                 .isNumeric()
-                .withMessage("Current mileage must be a number"),
+                .withMessage("Total mileage must be a number"),
+            body("lastTripDistance")
+                .optional()
+                .isNumeric()
+                .withMessage("Last trip distance must be a number"),
+            body("totalFuelConsumed")
+                .optional()
+                .isNumeric()
+                .withMessage("Total fuel consumed must be a number"),
+            body("lastFuelAdded")
+                .optional()
+                .isNumeric()
+                .withMessage("Last fuel added must be a number"),
             body("status")
                 .optional()
                 .isIn(["Available", "In-transit", "Maintenance", "Out-service"]),
@@ -22,10 +34,6 @@ class VehicleMiddleware {
                 .optional()
                 .isNumeric()
                 .withMessage("Last oil change mileage must be a number"),
-            body("nextServiceDate")
-                .optional()
-                .isISO8601()
-                .withMessage("Next service date must be a valid date"),
             body("currentDriver")
                 .optional()
                 .isMongoId()

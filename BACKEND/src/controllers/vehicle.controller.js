@@ -42,6 +42,41 @@ class VehicleController {
     }
   }
 
+  async getMyVehicle(req, res) {
+    try {
+      const driverId = req.user && req.user._id ? req.user._id : req.user.id;
+      const vehicle = await this.vehicleService.getVehicleByDriver(driverId);
+      if (!vehicle) return res.status(404).json({ status: 'error', message: 'Vehicle not found for this driver' });
+      res.status(200).json({ status: 'success', vehicle });
+    } catch (error) {
+      res.status(400).json({ status: 'error', message: error.message });
+    }
+  }
+
+  async updateMyVehicle(req, res) {
+    try {
+      const driverId = req.user && req.user._id ? req.user._id : req.user.id;
+      const vehicle = await this.vehicleService.getVehicleByDriver(driverId);
+      if (!vehicle) return res.status(404).json({ status: 'error', message: 'Vehicle not found for this driver' });
+
+      // Only allow updating mileage and last oil change from this endpoint
+      const updateData = {};
+      // accept both legacy `currentMileage` and new `totalMileage`
+      if (req.body.totalMileage !== undefined) updateData.totalMileage = req.body.totalMileage;
+      else if (req.body.currentMileage !== undefined) updateData.totalMileage = req.body.currentMileage;
+
+      if (req.body.lastTripDistance !== undefined) updateData.lastTripDistance = req.body.lastTripDistance;
+      if (req.body.totalFuelConsumed !== undefined) updateData.totalFuelConsumed = req.body.totalFuelConsumed;
+      if (req.body.lastFuelAdded !== undefined) updateData.lastFuelAdded = req.body.lastFuelAdded;
+      if (req.body.lastOilChangeMileage !== undefined) updateData.lastOilChangeMileage = req.body.lastOilChangeMileage;
+
+      const updated = await this.vehicleService.updateVehicle(vehicle._id, updateData);
+      res.status(200).json({ status: 'success', vehicle: updated });
+    } catch (error) {
+      res.status(400).json({ status: 'error', message: error.message });
+    }
+  }
+
   async update(req, res) {
     try {
       const data = { ...req.body };

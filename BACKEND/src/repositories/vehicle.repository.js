@@ -2,23 +2,29 @@ import Vehicle from '../models/vehicle.model.js';
 
 class VehicleRepository {
   async findByPlateNumber(plateNumber) {
-    return Vehicle.findOne({ plateNumber });
+    return Vehicle.findOne({ plateNumber }).populate('currentDriver', 'first_name last_name email');
   }
 
   async create(data) {
-    return Vehicle.create(data);
+    const doc = await Vehicle.create(data);
+    return Vehicle.findById(doc._id).populate('currentDriver', 'first_name last_name email');
   }
 
   async findAll() {
-    return Vehicle.find();
+    return Vehicle.find().populate('currentDriver', 'first_name last_name email');
   }
 
   async findById(id) {
-    return Vehicle.findById(id);
+    return Vehicle.findById(id).populate('currentDriver', 'first_name last_name email');
+  }
+
+  async findByDriver(driverId) {
+    return Vehicle.findOne({ currentDriver: driverId }).populate('currentDriver', 'first_name last_name email');
   }
 
   async update(id, data) {
-    return Vehicle.findByIdAndUpdate(id, data, { new: true });
+    const updated = await Vehicle.findByIdAndUpdate(id, data, { new: true });
+    return Vehicle.findById(updated._id).populate('currentDriver', 'first_name last_name email');
   }
 
   async delete(id) {
