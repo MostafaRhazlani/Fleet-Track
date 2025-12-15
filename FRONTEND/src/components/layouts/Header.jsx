@@ -23,6 +23,7 @@ const Header = () => {
   const driverMenu = [
     { path: '/driver/dashboard', title: 'Dashboard' },
     { path: '/driver/my-trips', title: 'My Trips' },
+    { path: '/driver/my-vehicle', title: 'My Vehicle' },
   ];
 
   const headerMenu = user?.role === 'Driver' ? driverMenu : adminMenu;

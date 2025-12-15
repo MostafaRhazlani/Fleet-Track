@@ -35,7 +35,7 @@ const PrivateRoute = ({ allowedRoles }) => {
     <>
       <Header />
       <Navbar />
-      <main className='bg-indigo-200/20 w-full h-screen pt-10'>
+      <main className='bg-indigo-200/20 w-full min-h-screen pt-10'>
         <div className='w-11/12 lg:w-4/5 mx-auto'>
           <Outlet />
         </div>

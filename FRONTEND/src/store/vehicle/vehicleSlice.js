@@ -3,7 +3,21 @@ import api from '../../tools/axios';
 
 const initialState = {
   vehicles: [],
+  myVehicle: null,
 };
+
+export const fetchMyVehicle = createAsyncThunk('vehicle/my', async () => {
+  return (await api.get('/vehicle/my-vehicle')).data.vehicle;
+});
+
+export const updateMyVehicle = createAsyncThunk('vehicle/updateMy', async (payload, { rejectWithValue }) => {
+  try {
+    const response = await api.patch('/vehicle/my-vehicle', payload);
+    return response.data.vehicle;
+  } catch (error) {
+    return rejectWithValue(error.response?.data || 'Failed to update my vehicle');
+  }
+});
 
 export const fetchVehicles = createAsyncThunk('vehicles', async () => {
     return (await api.get('/vehicle/vehicles')).data.vehicles;
@@ -59,6 +73,13 @@ const vehicleSlice = createSlice({
 
     .addCase(deleteVehicle.fulfilled, (state, action) => {
       state.vehicles = state.vehicles.filter(v => v._id !== action.payload);
+    });
+    builder.addCase(fetchMyVehicle.fulfilled, (state, action) => {
+      state.myVehicle = action.payload;
+    });
+    builder.addCase(updateMyVehicle.fulfilled, (state, action) => {
+      state.myVehicle = action.payload;
+      state.vehicles = state.vehicles.map(v => v._id === action.payload._id ? action.payload : v);
     });
   },
 });

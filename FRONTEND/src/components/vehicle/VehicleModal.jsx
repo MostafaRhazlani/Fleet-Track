@@ -25,8 +25,9 @@ const VehicleModal = ({ open, onClose, mode = 'add', initialData = null, onSubmi
         assignedDriver: null,
         vehicleType: { value: 'Truck', label: 'Truck' },
         maxLoad: 0,
-        nextServiceDate: '',
-        currentMileage: '',
+        // nextServiceDate removed per new requirement
+        
+        lastTripDistance: '',
         lastOilChangeMileage: '',
         status: 'Available',
         image: '',
@@ -64,8 +65,7 @@ const VehicleModal = ({ open, onClose, mode = 'add', initialData = null, onSubmi
                 assignedDriver: assignedDriverOpt,
                 vehicleType: initialData.vehicleType ? { value: initialData.vehicleType, label: initialData.vehicleType } : { value: 'Truck', label: 'Truck' },
                 maxLoad: initialData.maxLoad || 0,
-                nextServiceDate: initialData.nextServiceDate ? initialData.nextServiceDate.split('T')[0] : '',
-                currentMileage: initialData.currentMileage ?? '',
+                lastTripDistance: initialData.lastTripDistance ?? '',
                 lastOilChangeMileage: initialData.lastOilChangeMileage ?? '',
                 status: initialData.status || 'Available',
                 image: initialData.image ? (initialData.image.startsWith('/') ? api.defaults.baseURL.replace('/api/v1', '') + initialData.image : initialData.image) : '',
@@ -83,8 +83,7 @@ const VehicleModal = ({ open, onClose, mode = 'add', initialData = null, onSubmi
                 assignedDriver: null,
                 vehicleType: { value: 'Truck', label: 'Truck' },
                 maxLoad: 0,
-                nextServiceDate: '',
-                currentMileage: '',
+                lastTripDistance: '',
                 lastOilChangeMileage: '',
                 status: 'Available',
                 image: '',
@@ -123,17 +122,12 @@ const VehicleModal = ({ open, onClose, mode = 'add', initialData = null, onSubmi
         fd.append('model', formData.model || '');
         fd.append('plateNumber', formData.plateNumber || '');
         fd.append('maxLoad', formData.maxLoad || '');
-        if (formData.nextServiceDate) fd.append('nextServiceDate', formData.nextServiceDate);
 
         if (formData.vehicleType?.value) fd.append('vehicleType', formData.vehicleType.value);
-
-        // append edit-only maintenance and assignment fields
-        if (mode === 'edit') {
-            if (formData.currentMileage !== undefined && formData.currentMileage !== '') fd.append('currentMileage', formData.currentMileage);
-            if (formData.lastOilChangeMileage !== undefined && formData.lastOilChangeMileage !== '') fd.append('lastOilChangeMileage', formData.lastOilChangeMileage);
-            if (formData.status) fd.append('status', formData.status);
-            if (formData.assignedDriver?.value) fd.append('currentDriver', formData.assignedDriver.value);
-        }
+        if (formData.lastTripDistance !== undefined && formData.lastTripDistance !== '') fd.append('lastTripDistance', formData.lastTripDistance);
+        if (formData.lastOilChangeMileage !== undefined && formData.lastOilChangeMileage !== '') fd.append('lastOilChangeMileage', formData.lastOilChangeMileage);
+        if (formData.status) fd.append('status', formData.status);
+        if (formData.assignedDriver?.value) fd.append('currentDriver', formData.assignedDriver.value);
 
         if (formData.imageFile) fd.append('image', formData.imageFile);
         
@@ -188,7 +182,7 @@ const VehicleModal = ({ open, onClose, mode = 'add', initialData = null, onSubmi
                                 onChange={handleChange}
                                 placeholder="e.g. Renault"
                                 className="w-full"
-                                disabled={mode === 'view'}
+                                disabled={false}
                             />
 
                             <Input
@@ -198,7 +192,7 @@ const VehicleModal = ({ open, onClose, mode = 'add', initialData = null, onSubmi
                                 onChange={handleChange}
                                 placeholder="e.g. Kangoo Express"
                                 className="w-full"
-                                disabled={mode === 'view'}
+                                disabled={false}
                             />
 
                             <Input
@@ -208,37 +202,30 @@ const VehicleModal = ({ open, onClose, mode = 'add', initialData = null, onSubmi
                                 onChange={handleChange}
                                 placeholder="e.g. 12345-A-6"
                                 className="w-full"
-                                disabled={mode === 'view'}
+                                disabled={false}
                             />
                             
-                            {mode === 'view' ? (
-                                <div>
-                                    <label className="block text-xs font-medium text-gray-500 mb-1 ml-1">Assigned Driver</label>
-                                    <div className="px-4 py-2 rounded-xl border bg-gray-50 text-gray-700">{formData.assignedDriver?.label || 'Unassigned'}</div>
-                                </div>
-                            ) : (
-                                <>
-                                    <CustomSelect 
-                                        label="Vehicle Type"
-                                        placeholder={"Select Vehicle Type"}
-                                        className="w-full"
-                                        options={vehicleTypeOptions}
-                                        value={formData.vehicleType}
-                                        onChange={(opt) => setFormData(prev => ({ ...prev, vehicleType: opt }))}
-                                    />
+                            <>
+                                <CustomSelect 
+                                    label="Vehicle Type"
+                                    placeholder={"Select Vehicle Type"}
+                                    className="w-full"
+                                    options={vehicleTypeOptions}
+                                    value={formData.vehicleType}
+                                    onChange={(opt) => setFormData(prev => ({ ...prev, vehicleType: opt }))}
+                                />
 
-                                    {mode === 'edit' && (
-                                        <CustomSelect
-                                            label="Assigned Driver"
-                                            placeholder={"Select Driver"}
-                                            className="w-full"
-                                            options={driversOptions}
-                                            value={formData.assignedDriver}
-                                            onChange={(opt) => setFormData(prev => ({ ...prev, assignedDriver: opt }))}
-                                        />
-                                    )}
-                                </>
-                            )}
+                                {mode === 'edit' && (
+                                    <CustomSelect
+                                        label="Assigned Driver"
+                                        placeholder={"Select Driver"}
+                                        className="w-full"
+                                        options={driversOptions}
+                                        value={formData.assignedDriver}
+                                        onChange={(opt) => setFormData(prev => ({ ...prev, assignedDriver: opt }))}
+                                    />
+                                )}
+                            </>
 
                             <Input
                                 label="Max Load"
@@ -248,56 +235,41 @@ const VehicleModal = ({ open, onClose, mode = 'add', initialData = null, onSubmi
                                 onChange={handleNumberChange}
                                 placeholder="e.g. 1,500 kg"
                                 className="w-full"
-                                disabled={mode === 'view'}
+                                disabled={false}
                             />
+                                <Input
+                                    label="Current Mileage"
+                                    name="lastTripDistance"
+                                    type="number"
+                                    value={formData.lastTripDistance}
+                                    onChange={handleNumberChange}
+                                    placeholder="e.g. 44000"
+                                    className="w-full"
+                                />
 
-                            <Input
-                                label="Next Service Date"
-                                type="date"
-                                name="nextServiceDate"
-                                value={formData.nextServiceDate}
-                                onChange={handleChange}
-                                className="w-full"
-                                disabled={mode === 'view'}
-                            />
+                                <Input
+                                    label="Last Oil Change Mileage"
+                                    name="lastOilChangeMileage"
+                                    type="number"
+                                    value={formData.lastOilChangeMileage}
+                                    onChange={handleNumberChange}
+                                    placeholder="e.g. 43000"
+                                    className="w-full"
+                                />
 
-                            {mode === 'edit' && (
-                                <>
-                                    <Input
-                                        label="Current Mileage"
-                                        name="currentMileage"
-                                        type="number"
-                                        value={formData.currentMileage}
-                                        onChange={handleNumberChange}
-                                        placeholder="e.g. 45000"
-                                        className="w-full"
-                                    />
-
-                                    <Input
-                                        label="Last Oil Change Mileage"
-                                        name="lastOilChangeMileage"
-                                        type="number"
-                                        value={formData.lastOilChangeMileage}
-                                        onChange={handleNumberChange}
-                                        placeholder="e.g. 43000"
-                                        className="w-full"
-                                    />
-
-                                    <CustomSelect
-                                        label="Status"
-                                        placeholder="Select status"
-                                        className="w-full"
-                                        options={[
-                                            { value: 'Available', label: 'Available' },
-                                            { value: 'In-transit', label: 'In-transit' },
-                                            { value: 'Maintenance', label: 'Maintenance' },
-                                            { value: 'Out-service', label: 'Out-service' },
-                                        ]}
-                                        value={formData.status ? { value: formData.status, label: formData.status } : null}
-                                        onChange={(opt) => setFormData(prev => ({ ...prev, status: opt?.value }))}
-                                    />
-                                </>
-                            )}
+                                <CustomSelect
+                                    label="Status"
+                                    placeholder="Select status"
+                                    className="w-full"
+                                    options={[
+                                        { value: 'Available', label: 'Available' },
+                                        { value: 'In-transit', label: 'In-transit' },
+                                        { value: 'Maintenance', label: 'Maintenance' },
+                                        { value: 'Out-service', label: 'Out-service' },
+                                    ]}
+                                    value={formData.status ? { value: formData.status, label: formData.status } : null}
+                                    onChange={(opt) => setFormData(prev => ({ ...prev, status: opt?.value }))}
+                                />
                         </div>
                     </div>
 

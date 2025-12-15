@@ -8,6 +8,7 @@ import Vehicles from "../pages/admin/Vehicles";
 import Tires from "../pages/admin/Tires";
 import Trips from "../pages/admin/Trips";
 import MyTrips from "../pages/driver/MyTrips";
+import MyVehicle from "../pages/driver/MyVehicle";
 
 const router = [
     { path: 'login', element: <Login /> },
@@ -29,6 +30,7 @@ const router = [
         children: [
             { path: 'dashboard', element: <DriverDashboard /> },
             { path: 'my-trips', element: <MyTrips /> }
+            ,{ path: 'my-vehicle', element: <MyVehicle /> }
         ]
     }
 ];
