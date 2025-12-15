@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./BACKEND
+      dockerfile: Dockerfile
+    container_name: fleettrack-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./BACKEND:/app:cached
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/fleet_track
+    networks:
+      - FleetTrack
+
+  frontend:
+    build:
+      context: ./FRONTEND
+      dockerfile: Dockerfile
+    container_name: fleettrack-frontend
+    ports:
+      - "3002:3000"
+    depends_on:
+      - backend
+    networks:
+      - FleetTrack
+
+  mongo:
+    image: mongo:6.0
+    container_name: fleettrack-mongo
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27018"
+    networks:
+      - FleetTrack
+
+volumes:
+  mongo-data:
+
+networks:
+  FleetTrack:
+    driver: bridge

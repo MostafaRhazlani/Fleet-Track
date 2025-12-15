@@ -46,9 +46,12 @@ const MyVehicle = () => {
       const lastTripDistance = Number(vehicle.lastTripDistance ?? 0);
       const currentMileage = form.currentMileage !== undefined && form.currentMileage !== '' ? Number(form.currentMileage) : null;
       if (currentMileage !== null) {
-        let totalMileage = currentMileage - lastTripDistance;
-        payload.totalMileage += totalMileage;
-        payload.lastOilChangeMileage = payload.lastOilChangeMileage + totalMileage
+        const baseTotal = Number(vehicle.totalMileage ?? 0);
+        let total = currentMileage - lastTripDistance;
+
+        if (total < 0) total = 0;
+        payload.totalMileage = baseTotal + total;
+        payload.lastOilChangeMileage = Number(payload.lastOilChangeMileage || 0) + total;
       }
 
       const currentFuel = form.currentFuelAdded !== undefined && form.currentFuelAdded !== '' ? Number(form.currentFuelAdded) : null;

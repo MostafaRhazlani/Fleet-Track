@@ -48,10 +48,11 @@ class VehicleService {
 
   async getAllVehicles() {
     const list = await this.vehicleRepository.findAll();
-    const out = [];
-    for (const v of list) {
-      out.push(await this._computeFlagsForVehicle(v));
-    }
+    
+    const out = await Promise.all(
+        list.map(v => this._computeFlagsForVehicle(v))
+    );
+    
     return out;
   }
 

@@ -49,7 +49,10 @@ const VehicleCard = ({ vehicle, onDelete, onEdit }) => {
                     </div>
                     <div className="flex justify-between">
                         <span className="text-gray-400 mb-0.5">Assigned driver</span>
-                        <span className="font-semibold text-gray-800">{`${vehicle.currentDriver.first_name} ${vehicle.currentDriver.last_name}`}</span>
+                        {vehicle.currentDriver && typeof vehicle.currentDriver === 'object' 
+                            ? `${vehicle.currentDriver.first_name || ''} ${vehicle.currentDriver.last_name || ''}` 
+                            : 'Unassigned'
+                        }
                     </div>
                 </div>
 
