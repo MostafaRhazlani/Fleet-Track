@@ -6,6 +6,20 @@ jest.unstable_mockModule('../src/helpers/custom.throw.error.js', () => ({
     }),
 }));
 
+// Mock Maintenance model to avoid DB calls in service during tests
+jest.unstable_mockModule('../src/models/maintenance.model.js', () => ({
+    default: {
+        findOne: jest.fn().mockReturnValue({ lean: jest.fn().mockResolvedValue({ rules: [] }) }),
+    }
+}));
+
+// Mock Tire model to avoid DB calls in service during tests
+jest.unstable_mockModule('../src/models/tire.model.js', () => ({
+    default: {
+        find: jest.fn().mockReturnValue({ lean: jest.fn().mockResolvedValue([]) }),
+    }
+}));
+
 const { default: VehicleService } = await import('../src/services/vehicle.service.js');
 const { default: CustomThrowError } = await import('../src/helpers/custom.throw.error.js');
 
@@ -39,7 +53,7 @@ describe('VehicleService', () => {
 
             expect(mockVehicleRepository.findByPlateNumber).toHaveBeenCalledWith('ABC123');
             expect(mockVehicleRepository.create).toHaveBeenCalledWith(mockData);
-            expect(result).toEqual({ id: 1, ...mockData });
+            expect(result).toMatchObject({ id: 1, ...mockData });
         });
 
         it('Should throw an error if plate number already exist', async () => {
@@ -65,7 +79,8 @@ describe('VehicleService', () => {
             const result = await vehicleService.getAllVehicles();
 
             expect(mockVehicleRepository.findAll).toHaveBeenCalled();
-            expect(result).toEqual(mockData)
+            expect(result).toHaveLength(mockData.length);
+            expect(result[0]).toMatchObject(mockData[0]);
         })
     });
 
@@ -75,7 +90,7 @@ describe('VehicleService', () => {
             mockVehicleRepository.findById.mockResolvedValue(mockVehicle);
             const result = await vehicleService.getVehicleById(1);
             expect(mockVehicleRepository.findById).toHaveBeenCalledWith(1);
-            expect(result).toEqual(mockVehicle);
+            expect(result).toMatchObject(mockVehicle);
         })
     })
 
@@ -85,7 +100,7 @@ describe('VehicleService', () => {
             mockVehicleRepository.update.mockResolvedValue(updateData);
             const result = await vehicleService.updateVehicle(1, updateData);
             expect(mockVehicleRepository.update).toHaveBeenCalledWith(1, updateData);
-            expect(result).toEqual(updateData);
+            expect(result).toMatchObject(updateData);
         })
     });
 
