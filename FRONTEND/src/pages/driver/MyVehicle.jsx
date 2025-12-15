@@ -121,9 +121,9 @@ const MyVehicle = () => {
               <DetailRow icon={<MapPin className="w-4 h-4" />} label="To" value={trips[0] ? trips[0].to : '—'} />
               <DetailRow icon={<Clock className="w-4 h-4" />} label="Start" value={trips[0]?.startDate ? new Date(trips[0].startDate).toLocaleString() : '—'} />
               <DetailRow icon={<Clock className="w-4 h-4" />} label="End" value={trips[0]?.endDate ? new Date(trips[0].endDate).toLocaleString() : '—'} />
-              <DetailRow icon={<Truck className="w-4 h-4" />} label="Total Mileage" value={`${vehicle.totalMileage ?? 0} km`} />
+              <DetailRow icon={<Truck className="w-4 h-4" />} label="Total Mileage" value={`${vehicle.totalMileage ?? 0} km`} danger={!!vehicle.maintenanceDue} />
               <DetailRow icon={<Fuel className="w-4 h-4" />} label="Fuel Consumed" value={`${vehicle.totalFuelConsumed ?? 0} L`} />
-              <DetailRow icon={<Droplets className="w-4 h-4" />} label="Last Oil Change" value={`${vehicle.lastOilChangeMileage ?? 0} km`} />
+              <DetailRow icon={<Droplets className="w-4 h-4" />} label="Last Oil Change" value={`${vehicle.lastOilChangeMileage ?? 0} km`} danger={!!vehicle.oilDue} />
               <DetailRow icon={<Fuel className="w-4 h-4" />} label="Last Fuel Added" value={`${vehicle.lastFuelAdded ?? 0} L`} />
             </div>
           </div>
