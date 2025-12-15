@@ -26,7 +26,7 @@ Local development (without Docker):
 Backend
 ```bash
 cd BACKEND
-npm ci
+npm i
 # create or update BACKEND/.env (see notes)
 npm run start
 ```
@@ -34,7 +34,7 @@ npm run start
 Frontend
 ```bash
 cd FRONTEND
-npm ci
+npm i
 npm run dev
 ```
 
